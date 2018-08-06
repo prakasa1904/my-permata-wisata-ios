@@ -7,19 +7,37 @@
 //
 
 import UIKit
+import WebKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, WKNavigationDelegate {
+    var webView: WKWebView!
+    
+    override func loadView() {
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        view = webView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // initialize and load url
+        let url = URL(string: "https://mypermatawisata.com/opentrip/")!
+        webView.load(URLRequest(url: url))
+        
+        // event handler
+        let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
+        toolbarItems = [refresh]
+        navigationController?.isToolbarHidden = false
     }
-
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        title = webView.title
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
-
